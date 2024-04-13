@@ -52,7 +52,11 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public T pesquisar(T valor, Comparator comparador) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valor == null) {
+            return null;
+        } else  {
+            return pesquisarRecursivo(valor, this.raiz, comparador);
+        }
     }
 
     private T pesquisarRecursivo(T valor, No<T> no, Comparator comparador) {
@@ -112,14 +116,44 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return quant;
     }
 
-    @Override
+     @Override
     public String caminharEmNivel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<No<T>> fila = new ArrayList<No<T>>();
+        String nivelNos = "";
+
+        if (this.raiz == null) {
+            nivelNos = "[]";
+        } else {
+            No<T> atualNo;
+
+            fila.add(this.raiz);
+            nivelNos = "[";
+            while (fila.size() > 0 ) {
+                atualNo = fila.getFirst();
+                nivelNos += atualNo.getValor() + "\n";
+
+                fila.removeFirst();
+
+                if (atualNo.getFilhoEsquerda() != null) {
+                    fila.add(atualNo.getFilhoEsquerda());
+                }
+
+                if (atualNo.getFilhoDireita() != null) {
+                    fila.add(atualNo.getFilhoDireita());
+                }
+            }
+            nivelNos += "]";
+        }
+        return nivelNos;
     }
 
     @Override
     public String caminharEmOrdem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String nivelOrdem = "[";
+        caminharEmOrdem(this.raiz, nivelOrdem);
+        nivelOrdem += "]";
+
+        return nivelOrdem;
     }
 
     private void caminharEmOrdem(No<T> raiz, String nivelOrdem) {
