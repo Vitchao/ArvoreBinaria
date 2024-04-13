@@ -14,7 +14,35 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public void adicionar(T novoValor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        No<T> novoNo = new No<T>(novoValor);
+
+        if (this.raiz == null){
+            this.raiz = novoNo;
+        } else {
+            No<T> atualNo = this.raiz;
+            boolean inserido = false;
+
+            while(!inserido) {
+                //Novo No é menor do que o No Atual -> Novo Filho Esquerda
+                if (comparador.compare(novoNo.getValor(), atualNo.getValor()) < 0) {
+                    if (atualNo.getFilhoEsquerda() == null) {
+                        inserido = true;
+                        atualNo.setFilhoEsquerda(novoNo);
+                    } else {
+                        atualNo = atualNo.getFilhoEsquerda();
+                    }
+                }
+                //Novo No é maior do que o NO Atual -> Novo Filho Direita
+                else {
+                    if (atualNo.getFilhoDireita() == null) {
+                        inserido = true;
+                        atualNo.setFilhoDireita(novoNo);
+                    } else {
+                        atualNo = atualNo.getFilhoDireita();
+                    }
+                }
+            }
+        }
     }
 
     @Override
