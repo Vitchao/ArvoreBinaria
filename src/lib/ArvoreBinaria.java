@@ -47,7 +47,11 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public T pesquisar(T valor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valor == null) {
+            return null;
+        } else {
+            return pesquisarRecursivo(valor, this.raiz,this.comparador);
+        }
     }
 
     @Override
@@ -82,7 +86,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public int altura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return altura(this.raiz);
     }
 
     private int altura(No<T> no) {
@@ -103,7 +107,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public int quantidadeNos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return quantidadeNos(this.raiz);
     }
 
     private int quantidadeNos(No<T> no) {
@@ -116,7 +120,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return quant;
     }
 
-     @Override
+    @Override
     public String caminharEmNivel() {
         ArrayList<No<T>> fila = new ArrayList<No<T>>();
         String nivelNos = "";
