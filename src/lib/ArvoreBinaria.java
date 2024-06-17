@@ -81,7 +81,47 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public T remover(T valor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        No<T> noRetorno = new No<>(null);
+        this.raiz = removerRecursivo(this.raiz, valor, noRetorno);
+
+        return noRetorno.getValor();
+    }
+
+    protected No<T> removerRecursivo(No<T> no, T valor, No<T> noRetorno) {
+        if (no == null) {
+            return null;
+        }
+
+        int comparacao = comparador.compare(valor, no.getValor());
+        if (comparacao < 0) {
+            no.setFilhoEsquerda(removerRecursivo(no.getFilhoEsquerda(), valor, noRetorno));
+        } else if (comparacao > 0) {
+            no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), valor, noRetorno));
+        } else {
+            noRetorno.setValor(no.getValor());
+            if (no.getFilhoEsquerda() == null && no.getFilhoDireita() == null) {
+                return null;
+            }
+            else if (no.getFilhoEsquerda() == null) {
+                return no.getFilhoDireita();
+            } else if (no.getFilhoDireita() == null) {
+                return no.getFilhoEsquerda();
+            }
+            else {
+                No<T> minimo = encontrarMinimo(no.getFilhoDireita());
+                no.setValor(minimo.getValor());
+                no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), minimo.getValor(), new No<T>(null)));
+            }
+        }
+        return raiz;
+    }
+
+    private No<T> encontrarMinimo(No<T> no) {
+        while (no.getFilhoEsquerda() != null) {
+            no = no.getFilhoEsquerda();
+        }
+        //Retornando menor nó
+        return no;
     }
 
     @Override
@@ -153,17 +193,20 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public String caminharEmOrdem() {
-        String nivelOrdem = "[";
-        caminharEmOrdem(this.raiz, nivelOrdem);
-        nivelOrdem += "]";
+        StringBuilder nivelOrdem = new StringBuilder();
 
-        return nivelOrdem;
+        nivelOrdem.append("[\n");
+        caminharEmOrdem(this.raiz, nivelOrdem);
+        nivelOrdem.append("]");;
+
+        return nivelOrdem.toString().trim();
     }
 
-    private void caminharEmOrdem(No<T> raiz, String nivelOrdem) {
+    private void caminharEmOrdem(No<T> raiz, StringBuilder nivelOrdem) {
         if (raiz != null) {
             caminharEmOrdem(raiz.getFilhoEsquerda(), nivelOrdem);
-            nivelOrdem += raiz.getValor() + "\n";
+            nivelOrdem.append(raiz.getValor());
+            nivelOrdem.append("\n");
             caminharEmOrdem(raiz.getFilhoDireita(), nivelOrdem);
         }
     }
