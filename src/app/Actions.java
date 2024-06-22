@@ -36,6 +36,11 @@ public class Actions {
     }
 
     public Aluno ExcluirAlunoMatricula(Aluno aluno){
+        Aluno exAlun = this.ConsultarAlunoNome(aluno.getNome());
+        if (exAlun != null) {
+            this.alunosNome.remover(exAlun);
+        }
+
         return this.alunosMat.remover(aluno);
     }
 

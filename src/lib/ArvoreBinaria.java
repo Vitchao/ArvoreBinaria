@@ -50,7 +50,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         if (valor == null) {
             return null;
         } else {
-            return pesquisarRecursivo(valor, this.raiz,this.comparador);
+            return pesquisarRecursivo(valor, this.raiz, this.comparador);
         }
     }
 
@@ -81,42 +81,38 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public T remover(T valor) {
-        No<T> noRetorno = new No<>(null);
-        this.raiz = removerRecursivo(this.raiz, valor, noRetorno);
-
-        return noRetorno.getValor();
+        No<T> noRemovido = this.raiz;
+        this.raiz = removerRecursivo(this.raiz, valor);
+        return noRemovido != null ? noRemovido.getValor() : null;
     }
 
-    protected No<T> removerRecursivo(No<T> no, T valor, No<T> noRetorno) {
+    protected No<T> removerRecursivo(No<T> no, T valor) {
         if (no == null) {
             return null;
         }
 
         int comparacao = comparador.compare(valor, no.getValor());
         if (comparacao < 0) {
-            no.setFilhoEsquerda(removerRecursivo(no.getFilhoEsquerda(), valor, noRetorno));
+            no.setFilhoEsquerda(removerRecursivo(no.getFilhoEsquerda(), valor));
         } else if (comparacao > 0) {
-            no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), valor, noRetorno));
+            no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), valor));
         } else {
-            noRetorno.setValor(no.getValor());
             if (no.getFilhoEsquerda() == null && no.getFilhoDireita() == null) {
                 return null;
-            }
-            else if (no.getFilhoEsquerda() == null) {
+            } else if (no.getFilhoEsquerda() == null) {
                 return no.getFilhoDireita();
             } else if (no.getFilhoDireita() == null) {
                 return no.getFilhoEsquerda();
-            }
-            else {
+            } else {
                 No<T> minimo = encontrarMinimo(no.getFilhoDireita());
                 no.setValor(minimo.getValor());
-                no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), minimo.getValor(), new No<T>(null)));
+                no.setFilhoDireita(removerRecursivo(no.getFilhoDireita(), minimo.getValor()));
             }
         }
-        return raiz;
+        return no;
     }
 
-    private No<T> encontrarMinimo(No<T> no) {
+    protected No<T> encontrarMinimo(No<T> no) {
         while (no.getFilhoEsquerda() != null) {
             no = no.getFilhoEsquerda();
         }
